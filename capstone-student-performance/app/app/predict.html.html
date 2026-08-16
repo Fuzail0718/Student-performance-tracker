@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Make Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .btn:hover {
+            background: #5a67d8;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+        .result.show {
+            display: block;
+        }
+        .result.success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+        .result.fail {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .loading.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔮 Predict Student Performance</h1>
+        
+        <form id="predictForm">
+            <div class="form-group">
+                <label>Student ID</label>
+                <input type="text" id="studentId" placeholder="e.g., 4AD23CI038">
+            </div>
+            
+            <div class="form-group">
+                <label>Semester</label>
+                <select id="semester">
+                    <option value="1">Semester 1</option>
+                    <option value="2">Semester 2</option>
+                    <option value="3">Semester 3</option>
+                    <option value="4">Semester 4</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Internal Marks</label>
+                <input type="number" id="internalMarks" value="45" min="0" max="100">
+            </div>
+            
+            <div class="form-group">
+                <label>External Marks</label>
+                <input type="number" id="externalMarks" value="35" min="0" max="100">
+            </div>
+            
+            <div class="form-group">
+                <label>Subject Category</label>
+                <select id="subjectCategory">
+                    <option value="BCS">Computer Science</option>
+                    <option value="BDS">Data Science</option>
+                    <option value="BPLCK">Programming</option>
+                    <option value="BCHES">Chemistry</option>
+                    <option value="BPHYS">Physics</option>
+                    <option value="BMATS">Mathematics</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Average Semester Marks</label>
+                <input type="number" id="avgSemester" value="75" min="40" max="95">
+            </div>
+            
+            <div class="form-group">
+                <label>Overall Average Marks</label>
+                <input type="number" id="overallAvg" value="72" min="40" max="95">
+            </div>
+            
+            <button type="submit" class="btn">🔮 Predict</button>
+        </form>
+        
+        <div class="loading" id="loading">
+            <p>⏳ Processing...</p>
+        </div>
+        
+        <div class="result" id="result"></div>
+        
+        <a href="/" class="back-btn">← Back to Home</a>
+    </div>
+    
+    <script>
+        document.getElementById('predictForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const loading = document.getElementById('loading');
+            const resultDiv = document.getElementById('result');
+            
+            // Show loading
+            loading.classList.add('show');
+            resultDiv.classList.remove('show', 'success', 'fail');
+            
+            // Collect data
+            const data = {
+                student_id: document.getElementById('studentId').value,
+                Semester: parseInt(document.getElementById('semester').value),
+                InternalMarks: parseFloat(document.getElementById('internalMarks').value),
+                ExternalMarks: parseFloat(document.getElementById('externalMarks').value),
+                subject_category: ['BCS', 'BDS', 'BPLCK', 'BCHES', 'BPHYS', 'BMATS'].indexOf(
+                    document.getElementById('subjectCategory').value
+                ),
+                avg_semester_marks: parseFloat(document.getElementById('avgSemester').value),
+                std_semester_marks: 10,
+                min_semester_marks: parseFloat(document.getElementById('avgSemester').value) - 20,
+                max_semester_marks: parseFloat(document.getElementById('avgSemester').value) + 20,
+                avg_internal_marks: parseFloat(document.getElementById('internalMarks').value),
+                avg_external_marks: parseFloat(document.getElementById('externalMarks').value),
+                overall_avg_marks: parseFloat(document.getElementById('overallAvg').value),
+                overall_std_marks: 12,
+                total_subjects: 40,
+                overall_avg_internal: parseFloat(document.getElementById('internalMarks').value),
+                overall_avg_external: parseFloat(document.getElementById('externalMarks').value),
+                current_semester: parseInt(document.getElementById('semester').value),
+                internal_external_ratio: parseFloat(document.getElementById('internalMarks').value) / 
+                                        (parseFloat(document.getElementById('externalMarks').value) + 1)
+            };
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                loading.classList.remove('show');
+                
+                if (result.success) {
+                    let html = '<h3>📊 Prediction Results</h3>';
+                    
+                    for (const [model, prediction] of Object.entries(result.predictions)) {
+                        const isPass = prediction.prediction === 'Pass';
+                        html += `
+                            <div style="margin: 10px 0; padding: 10px; border-left: 4px solid ${isPass ? '#28a745' : '#dc3545'}; background: ${isPass ? '#d4edda' : '#f8d7da'}; border-radius: 4px;">
+                                <strong>${model}:</strong> 
+                                ${prediction.prediction} 
+                                (${prediction.probability} probability)
+                            </div>
+                        `;
+                    }
+                    
+                    resultDiv.innerHTML = html;
+                    resultDiv.classList.add('show');
+                } else {
+                    resultDiv.innerHTML = `<h3>❌ Error</h3><p>${result.error}</p>`;
+                    resultDiv.classList.add('show');
+                }
+            } catch (error) {
+                loading.classList.remove('show');
+                resultDiv.innerHTML = `<h3>❌ Error</h3><p>${error.message}</p>`;
+                resultDiv.classList.add('show');
+            }
+        });
+    </script>
+</body>
+</html>

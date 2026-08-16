@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Performance Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+        .status {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-secondary {
+            background: #764ba2;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        .feature-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .feature-card h3 {
+            margin: 0;
+            color: #333;
+            font-size: 1em;
+        }
+        .feature-card p {
+            margin: 5px 0 0;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Student Performance</h1>
+        <div class="subtitle">AI-Powered Academic Performance Prediction</div>
+        
+        <div class="status">
+            <strong>Status:</strong> {% if models_loaded %}🟢 Models Loaded{% else %}🔴 No Models Loaded{% endif %}
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <h3>📊 Prediction</h3>
+                <p>Predict pass/fail</p>
+            </div>
+            <div class="feature-card">
+                <h3>🤖 Multiple Models</h3>
+                <p>RF, NN, LSTM</p>
+            </div>
+            <div class="feature-card">
+                <h3>📈 Dashboard</h3>
+                <p>Interactive analytics</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔍 Explainability</h3>
+                <p>SHAP/LIME insights</p>
+            </div>
+        </div>
+        
+        <div>
+            <a href="/predict" class="btn">🔮 Make Prediction</a>
+            <a href="http://localhost:8501" target="_blank" class="btn btn-secondary">📊 Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>
